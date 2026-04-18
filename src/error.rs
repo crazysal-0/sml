@@ -1,8 +1,15 @@
 use std::fmt;
 
-enum ErrorType {
+#[derive(Debug)]
+pub enum ErrorType {
     IllegalCharacterError,
     SyntaxError,
+}
+
+#[derive(Debug)]
+pub struct Error {
+    pub error_type: ErrorType,
+    pub description: String,
 }
 
 impl fmt::Display for ErrorType {
@@ -12,11 +19,6 @@ impl fmt::Display for ErrorType {
             ErrorType::SyntaxError => write!(f, "SyntaxError"),
         }
     }
-}
-
-struct Error {
-    error_type: ErrorType,
-    description: String,
 }
 
 impl fmt::Display for Error {

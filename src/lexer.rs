@@ -1,4 +1,7 @@
-enum Token {
+use crate::error::{Error, ErrorType};
+
+#[derive(Debug)]
+pub enum Token {
     Identifier(String),
     Section(String),
     Newline,

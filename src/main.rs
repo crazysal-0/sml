@@ -1,5 +1,35 @@
-use std::env;
+use std::{env, process::exit};
+use std::fs;
+
+mod error;
+mod lexer;
 
 fn main() {
-    
+    let arguments: Vec<String> = env::args().collect();
+
+    if arguments.len() != 2 {
+        println!("Incorrect usage!");
+        println!("Expected: sml <file.sml>");
+        exit(1);
+    }
+
+    let source = match fs::read_to_string(&arguments[1]) {
+        Ok(contents) => contents,
+        Err(e) => {
+            println!("Error reading file: {}", e);
+            exit(1);
+        }
+    };
+
+    let tokens = lexer::generate_tokens(source);
+
+    match tokens {
+        Ok(tokens) => {
+            println!("{:?}", tokens);
+        }
+        Err(e) => {
+            println!("{}", e);
+            exit(1);
+        }
+    }
 }
