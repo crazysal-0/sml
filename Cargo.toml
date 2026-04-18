@@ -1,6 +1,24 @@
 [package]
 name = "sml"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+
+# Metadata for crates.io
+authors = ["Sam"]
+description = "A fast CFG-style markup/config language parser written in Rust"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/crazysal-0/sml"
+keywords = ["parser", "config", "cfg", "language", "sml"]
+categories = ["parsing", "config"]
 
 [dependencies]
+
+[dev-dependencies]
+criterion = "0.5"
+
+
+# Optional: CLI binary (uses src/main.rs automatically if present)
+[[bin]]
+name = "sml"
+path = "src/main.rs"

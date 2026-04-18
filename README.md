@@ -1,17 +1,55 @@
 # Sam Markup Language (SML)
 
-A simple markup language transpiler written in Rust.
+SML is a simple, fast markup/config language parser written in Rust.
 
-This project currently tokenizes `.sml` files and validates syntax, and will eventually transpile SML into Rust (and possibly C) structs.
+It tokenizes `.sml` files, validates syntax, and currently transpiles them into Rust-like structures.
 
-## Installation Guide
-Not here yet, coming soon!
+---
+
+## Features
+
+- Fast single-pass tokenizer
+- Lightweight syntax validation
+- Simple CFG-style parsing model
+- No AST overhead
+
+---
 
 ## Syntax
 
-To delcare a variables, type the name, then a space, then the value.
+Variables are declared using a name followed by a value separated by whitespace.
+
 ```sml
 sprite_size 32
 speed 12.2
 ```
----
+
+## Usage
+
+```rust
+use sml::compile;
+
+fn main() {
+    let input = "sprite_size 32\nspeed 12.2";
+    
+    match sml::compile(input) {
+        Ok(output) => println!("{}", output),
+        Err(e) => eprintln!("{}", e),
+    }
+}
+```
+
+## Example output:
+
+```rust
+struct A {
+    sprite_size: i64,
+    speed: f64,
+}
+```
+
+## Installation
+
+```bash
+cargo add sml
+```
