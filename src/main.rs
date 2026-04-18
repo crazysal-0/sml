@@ -1,45 +1,27 @@
-use std::{env, process::exit};
-use std::fs;
+use std::{env, fs, process::exit};
 
-mod error;
-mod lexer;
-mod validator;
-mod codegen;
+use sml::compile; // your lib.rs entrypoint
 
 fn main() {
-    let arguments: Vec<String> = env::args().collect();
+    let args: Vec<String> = env::args().collect();
 
-    if arguments.len() != 2 {
-        println!("Incorrect usage!");
-        println!("Expected: sml <file.sml>");
+    if args.len() != 2 {
+        eprintln!("Usage: sml <file.sml>");
         exit(1);
     }
 
-    let source = match fs::read_to_string(&arguments[1]) {
-        Ok(contents) => contents,
-        Err(e) => {
-            println!("Error reading file: {}", e);
-            exit(1);
-        }
-    };
-
-    let tokens = match lexer::generate_tokens(source) {
-        Ok(t) => t,
-        Err(e) => {
-            println!("{}", e);
-            exit(1);
-        }
-    };
-
-    println!("{:?}", tokens);
-
-    if let Err(e) = validator::validate(&tokens) {
-        println!("{}", e);
+    let source = fs::read_to_string(&args[1]).unwrap_or_else(|e| {
+        eprintln!("Error reading file: {e}");
         exit(1);
+    });
+
+    match compile(source) {
+        Ok(output) => {
+            println!("{output}");
+        }
+        Err(e) => {
+            eprintln!("{e}");
+            exit(1);
+        }
     }
-
-    let output = codegen::generate_code(&tokens);
-
-    println!("\n--- GENERATED CODE ---\n");
-    println!("{}", output);
 }
