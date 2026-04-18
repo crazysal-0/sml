@@ -1,6 +1,6 @@
 # Sam Markup Language (SML)
 
-A simple markup language compiler written in Rust.
+A simple markup language transpiler written in Rust.
 
 This project currently tokenizes `.sml` files and validates syntax, and will eventually transpile SML into Rust (and possibly C) structs.
 
@@ -12,6 +12,6 @@ Not here yet, coming soon!
 To delcare a variables, type the name, then a space, then the value.
 ```sml
 sprite_size 32
-speed = 12.2
+speed 12.2
 ```
 ---
