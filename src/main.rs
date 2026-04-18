@@ -3,6 +3,7 @@ use std::fs;
 
 mod error;
 mod lexer;
+mod validator;
 
 fn main() {
     let arguments: Vec<String> = env::args().collect();
@@ -21,15 +22,18 @@ fn main() {
         }
     };
 
-    let tokens = lexer::generate_tokens(source);
-
-    match tokens {
-        Ok(tokens) => {
-            println!("{:?}", tokens);
-        }
+    let tokens = match lexer::generate_tokens(source) {
+        Ok(t) => t,
         Err(e) => {
             println!("{}", e);
             exit(1);
         }
+    };
+
+    println!("{:?}", tokens);
+
+    if let Err(e) = validator::validate(&tokens) {
+        println!("{}", e);
+        exit(1);
     }
 }

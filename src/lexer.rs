@@ -5,7 +5,7 @@ pub enum Token {
     Identifier(String),
     Section(String),
     Newline,
-    ASSIGN,
+    Assign,
 
     Int(i64),
     Float(f64),
@@ -27,7 +27,7 @@ pub fn generate_tokens(source: String) -> Result<Vec<Token>, Error> {
         }
 
         else if current_character == ' ' {
-            tokens.push(Token::ASSIGN);
+            tokens.push(Token::Assign);
             index += 1;
         }
 
