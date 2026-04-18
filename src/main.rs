@@ -4,6 +4,7 @@ use std::fs;
 mod error;
 mod lexer;
 mod validator;
+mod codegen;
 
 fn main() {
     let arguments: Vec<String> = env::args().collect();
@@ -36,4 +37,9 @@ fn main() {
         println!("{}", e);
         exit(1);
     }
+
+    let output = codegen::generate_code(&tokens);
+
+    println!("\n--- GENERATED CODE ---\n");
+    println!("{}", output);
 }
