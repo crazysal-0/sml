@@ -1,6 +1,6 @@
 use std::{env, fs, process::exit};
 
-use sml::compile; // your lib.rs entrypoint
+use sml_lang::compile; // your lib.rs entrypoint
 
 fn main() {
     let args: Vec<String> = env::args().collect();
