@@ -1,6 +1,6 @@
 use std::{env, fs, process::exit};
 
-use oxide::compile; // your lib.rs entrypoint
+use oxideconf::compile; // your lib.rs entrypoint
 
 fn main() {
     let args: Vec<String> = env::args().collect();
