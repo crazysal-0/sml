@@ -55,5 +55,5 @@ struct Config {
 ## Installation
 
 ```bash
-cargo add oxidelconf
+cargo add oxideconf
 ```
