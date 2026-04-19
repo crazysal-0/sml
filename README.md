@@ -1,8 +1,8 @@
-# Sam Markup Language (SML)
+# OXL - Oxide Config Language
 
-SML is a simple, fast markup/config language parser written in Rust.
+OXL is a simple, fast config language parser written in Rust.
 
-It tokenizes `.sml` files, validates syntax, and currently transpiles them into Rust-like structures.
+It tokenizes `.oxl` files, validates syntax, and transpiles them into Rust or C structs.
 
 ---
 
@@ -12,6 +12,7 @@ It tokenizes `.sml` files, validates syntax, and currently transpiles them into 
 - Lightweight syntax validation
 - Simple CFG-style parsing model
 - No AST overhead
+- Compiles to Rust or C structs
 
 ---
 
@@ -19,37 +20,43 @@ It tokenizes `.sml` files, validates syntax, and currently transpiles them into 
 
 Variables are declared using a name followed by a value separated by whitespace.
 
-```sml
-sprite_size 32
-speed 12.2
+```oxl
+; this is a comment
+
+[window]
+title "oxide editor"
+width 1920
+height 1080
+fullscreen false
+opacity 0.8
 ```
 
 ## Usage
 
 ```rust
-use sml::compile;
+use oxidelconf::compile;
 
 fn main() {
-    let input = "sprite_size 32\nspeed 12.2";
+    let input = "width 1920\nheight 1080";
     
-    match sml::compile(input) {
+    match oxidelconf::compile(input.to_string()) {
         Ok(output) => println!("{}", output),
         Err(e) => eprintln!("{}", e),
     }
 }
 ```
 
-## Example output:
+## Example output
 
 ```rust
-struct A {
-    sprite_size: i64,
-    speed: f64,
+struct Config {
+    width: i64,
+    height: i64,
 }
 ```
 
 ## Installation
 
 ```bash
-cargo add sml
+cargo add oxidelconf
 ```
