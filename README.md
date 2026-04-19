@@ -28,7 +28,7 @@ height 1080
 ## Usage
 
 ```rust
-use oxidelconf::compile;
+use oxideconf::compile;
 
 fn main() {
     let input = "
@@ -36,7 +36,7 @@ fn main() {
         height 1080
     ";
     
-    match oxidelconf::compile(input.to_string()) {
+    match oxideconf::compile(input.to_string()) {
         Ok(output) => println!("{}", output),
         Err(e) => eprintln!("{}", e),
     }
