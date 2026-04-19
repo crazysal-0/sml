@@ -1,5 +1,5 @@
 [package]
-name = "oxl"
+name = "oxide"
 version = "0.1.0"
 edition = "2021"
 
@@ -20,5 +20,5 @@ criterion = "0.5"
 
 # Optional: CLI binary (uses src/main.rs automatically if present)
 [[bin]]
-name = "oxl"
+name = "oxide"
 path = "src/main.rs"
