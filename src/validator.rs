@@ -2,43 +2,47 @@ use crate::lexer::Token;
 use crate::error::{Error, ErrorType};
 
 enum State {
-    ExpectIdentifier,
+    ExpectIdentifierOrSection,
     ExpectAssign,
     ExpectValue,
     ExpectNewline,
 }
 
 pub fn validate(tokens: &[Token]) -> Result<(), Error> {
-    let mut state = State::ExpectIdentifier;
+    let mut state = State::ExpectIdentifierOrSection;
 
     for token in tokens {
         state = match state {
 
-            State::ExpectIdentifier => {
+            State::ExpectIdentifierOrSection => {
                 match token {
                     Token::Identifier(_) => State::ExpectAssign,
-                    Token::Newline => State::ExpectIdentifier, // allow empty lines
-                    _ => return Err(unexpected("Identifier")),
+                    Token::Section(_)    => State::ExpectNewline, // !section then newline
+                    Token::Newline       => State::ExpectIdentifierOrSection,
+                    _ => return Err(unexpected("Identifier or Section")),
                 }
             }
 
             State::ExpectAssign => {
                 match token {
                     Token::Assign => State::ExpectValue,
-                    _ => return Err(unexpected("ASSIGN")),
+                    _ => return Err(unexpected("Assign")),
                 }
             }
 
             State::ExpectValue => {
                 match token {
-                    Token::Int(_) | Token::Float(_) => State::ExpectNewline,
-                    _ => return Err(unexpected("Int or Float")),
+                    Token::Int(_)       |
+                    Token::Float(_)     |
+                    Token::StringVal(_) |
+                    Token::Bool(_)      => State::ExpectNewline,
+                    _ => return Err(unexpected("a value")),
                 }
             }
 
             State::ExpectNewline => {
                 match token {
-                    Token::Newline => State::ExpectIdentifier,
+                    Token::Newline => State::ExpectIdentifierOrSection,
                     _ => return Err(unexpected("Newline")),
                 }
             }

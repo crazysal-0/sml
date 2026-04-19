@@ -31,6 +31,45 @@ pub fn generate_tokens(source: String) -> Result<Vec<Token>, Error> {
             index += 1;
         }
 
+        else if current_character == ';' {
+            // skip comment until end of line
+            while index < chars.len() && chars[index] != '\n' {
+                index += 1;
+            }
+        }
+
+        else if current_character == '!' {
+            index += 1;
+            let mut buffer = String::new();
+
+            while index < chars.len() && chars[index].is_alphabetic() {
+                buffer.push(chars[index]);
+                index += 1;
+            }
+
+            if buffer.is_empty() {
+                return Err(Error {
+                    error_type: ErrorType::IllegalCharacterError,
+                    description: "Section label must be alphabetic".to_string(),
+                });
+            }
+
+            tokens.push(Token::Section(buffer));
+        }
+
+        else if current_character == '"' {
+            index += 1;
+            let mut buffer = String::new();
+
+            while index < chars.len() && chars[index] != '"' {
+                buffer.push(chars[index]);
+                index += 1;
+            }
+
+            index += 1; // skip closing "
+            tokens.push(Token::StringVal(buffer));
+        }
+
         else if current_character.is_alphabetic() {
             let mut buffer = String::new();
 
@@ -41,7 +80,11 @@ pub fn generate_tokens(source: String) -> Result<Vec<Token>, Error> {
                 index += 1;
             }
 
-            tokens.push(Token::Identifier(buffer));
+            match buffer.as_str() {
+                "true"  => tokens.push(Token::Bool(true)),
+                "false" => tokens.push(Token::Bool(false)),
+                _       => tokens.push(Token::Identifier(buffer)),
+            }
         }
 
         else if current_character.is_numeric() {
@@ -49,7 +92,6 @@ pub fn generate_tokens(source: String) -> Result<Vec<Token>, Error> {
 
             while index < chars.len() &&
                   (chars[index].is_numeric() || chars[index] == '.') {
-
                 number_string.push(chars[index]);
                 index += 1;
             }
