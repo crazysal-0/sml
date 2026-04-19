@@ -2,39 +2,51 @@ use crate::lexer::Token;
 
 pub fn generate_code(tokens: &[Token]) -> String {
     let mut output = String::new();
-    let mut current_section = "Config".to_string(); // default if no section
-    let mut in_struct = false;
     let mut i = 0;
 
     while i < tokens.len() {
         match &tokens[i] {
 
             Token::Section(name) => {
-                // close previous struct if open
-                if in_struct {
-                    output.push_str("}\n\n");
+                let mut struct_fields = String::new();
+                let mut instance_fields = String::new();
+
+                i += 1;
+
+                // collect all fields for this section
+                while i < tokens.len() {
+                    match &tokens[i] {
+                        Token::Section(_) => break,
+                        Token::Identifier(field_name) => {
+                            if let Some(value_token) = tokens.get(i + 2) {
+                                let (ty, val) = match value_token {
+                                    Token::Int(n)       => ("i64".to_string(), format!("{}", n)),
+                                    Token::Float(f)     => ("f64".to_string(), format!("{}", f)),
+                                    Token::StringVal(s) => ("String".to_string(), format!("\"{}\".to_string()", s)),
+                                    Token::Bool(b)      => ("bool".to_string(), format!("{}", b)),
+                                    _                   => ("unknown".to_string(), "unknown".to_string()),
+                                };
+
+                                struct_fields.push_str(&format!("    {}: {},\n", field_name, ty));
+                                instance_fields.push_str(&format!("    {}: {},\n", field_name, val));
+                                i += 3;
+                            }
+                        }
+                        _ => { i += 1; }
+                    }
                 }
 
-                // capitalize first letter for Rust struct name
-                let struct_name = capitalize(name);
-                output.push_str(&format!("struct {} {{\n", struct_name));
-                current_section = struct_name;
-                in_struct = true;
-            }
+                // output struct definition
+                output.push_str(&format!("struct {} {{\n", name));
+                output.push_str(&struct_fields);
+                output.push_str("}\n\n");
 
-            Token::Identifier(name) => {
-                if let Some(value_token) = tokens.get(i + 2) {
-                    // skip Assign token in between
-                    let ty = match value_token {
-                        Token::Int(_)       => "i64",
-                        Token::Float(_)     => "f64",
-                        Token::StringVal(_) => "String",
-                        Token::Bool(_)      => "bool",
-                        _                   => "unknown",
-                    };
+                // output instance
+                output.push_str(&format!("let {} = {} {{\n", name, name));
+                output.push_str(&instance_fields);
+                output.push_str("};\n\n");
 
-                    output.push_str(&format!("    {}: {},\n", name, ty));
-                }
+                continue;
             }
 
             _ => {}
@@ -43,18 +55,5 @@ pub fn generate_code(tokens: &[Token]) -> String {
         i += 1;
     }
 
-    // close last struct
-    if in_struct {
-        output.push_str("}\n");
-    }
-
     output
-}
-
-fn capitalize(s: &str) -> String {
-    let mut c = s.chars();
-    match c.next() {
-        None    => String::new(),
-        Some(f) => f.to_uppercase().to_string() + c.as_str(),
-    }
 }

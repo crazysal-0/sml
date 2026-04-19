@@ -1,15 +1,15 @@
 [package]
 name = "oxideconf"
-version = "0.2.1"
+version = "0.3.0"
 edition = "2021"
 
 # Metadata for crates.io
 authors = ["Sam"]
-description = "The Oxide Markup Lanage - A fast CFG-style markup/config language parser written in Rust"
+description = "The Oxide Markup Language - A fast CFG-style markup/config language parser written in Rust"
 readme = "README.md"
 license = "GPL-3.0-or-later"
 repository = "https://github.com/crazysal-0/sml"
-keywords = ["parser", "config", "cfg", "language", "sml"]
+keywords = ["parser", "config", "cfg", "language"]
 categories = ["parsing", "config"]
 
 [dependencies]
