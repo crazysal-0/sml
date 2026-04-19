@@ -1,11 +1,11 @@
 [package]
-name = "sml-lang"
+name = "oxl"
 version = "0.1.0"
 edition = "2021"
 
 # Metadata for crates.io
 authors = ["Sam"]
-description = "A fast CFG-style markup/config language parser written in Rust"
+description = "The Oxide Markup Lanage - A fast CFG-style markup/config language parser written in Rust"
 readme = "README.md"
 license = "GPL-3.0-or-later"
 repository = "https://github.com/crazysal-0/sml"
@@ -20,5 +20,5 @@ criterion = "0.5"
 
 # Optional: CLI binary (uses src/main.rs automatically if present)
 [[bin]]
-name = "sml"
+name = "oxl"
 path = "src/main.rs"
