@@ -10,7 +10,7 @@ readme = "README.md"
 license = "GPL-3.0-or-later"
 repository = "https://github.com/crazysal-0/sml"
 keywords = ["parser", "config", "cfg", "language", "sml"]
-categories = ["parsing", "configuration"]
+categories = ["parsing", "config"]
 
 [dependencies]
 
