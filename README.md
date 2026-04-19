@@ -2,7 +2,7 @@
 
 OXL is a simple, fast config language parser written in Rust.
 
-It tokenizes `.oxl` files, validates syntax, and transpiles them into Rust or C structs.
+It tokenizes `.oxl` files, validates syntax, and transpiles them into Rust structs.
 
 ---
 
@@ -12,17 +12,25 @@ It tokenizes `.oxl` files, validates syntax, and transpiles them into Rust or C 
 - Lightweight syntax validation
 - Simple CFG-style parsing model
 - No AST overhead
-- Transpiles to Rust
+- Transpiles to Rust structs
 
 ---
 
 ## Syntax
 
-Variables are declared using a name followed by a value separated by whitespace.
+Sections are declared with `!` followed by a name. Variables are declared using a name followed by a value separated by whitespace. `;` is used for comments.
 
 ```oxl
+; oxide config
+
+!window
+title "oxide editor"
 width 1920
 height 1080
+fullscreen false
+
+!audio
+volume 0.8
 ```
 
 ## Usage
@@ -31,10 +39,16 @@ height 1080
 use oxideconf::compile;
 
 fn main() {
-    let input = "
-        width 1920\n
-        height 1080
-    ";
+    let input = r#"
+!window
+title "oxide editor"
+width 1920
+height 1080
+fullscreen false
+
+!audio
+volume 0.8
+"#;
     
     match oxideconf::compile(input.to_string()) {
         Ok(output) => println!("{}", output),
@@ -46,9 +60,15 @@ fn main() {
 ## Example output
 
 ```rust
-struct Config {
+struct Window {
+    title: String,
     width: i64,
     height: i64,
+    fullscreen: bool,
+}
+
+struct Audio {
+    volume: f64,
 }
 ```
 
